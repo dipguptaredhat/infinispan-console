@@ -1,4 +1,8 @@
-import { ContentType, EncodingType } from '@services/infinispanRefData';
+import {
+  CacheFeature,
+  ContentType,
+  EncodingType,
+} from '@services/infinispanRefData';
 import { Either, left, right } from '@services/either';
 import { ConsoleServices } from '@services/ConsoleServices';
 
@@ -150,48 +154,57 @@ export class CacheConfigUtils {
 
   public static createCacheConfigFromData(data: CacheConfiguration): string {
     let cache;
+    let cacheType;
 
-    if (data.basic.topology === 'Distributed') {
-      cache = {
-        'distributed-cache': {
-          mode: data.basic.mode,
-          owners: data.basic.numberOfOwners,
-          statistics: data.basic.statistics,
-          encoding: {
-            'media-type': data.basic.encoding,
-          },
-          locking: {
-            isolation: data.advanced.isolationLevel,
-            striping: data.advanced.striping,
-            'concurrency-level': data.advanced.concurrencyLevel,
-            'acquire-timeout': data.advanced.lockAcquisitionTimeout,
-          },
-        },
+    const distributedCache = 'distributed-cache';
+    const replicatedCache = 'replicated-cache';
+
+    const generalCache = {
+      mode: data.basic.mode,
+      owners: data.basic.numberOfOwners,
+      statistics: data.basic.statistics,
+      encoding: {
+        'media-type': data.basic.encoding,
+      },
+      locking: {
+        isolation: data.advanced.isolationLevel,
+        striping: data.advanced.striping,
+        'concurrency-level': data.advanced.concurrencyLevel,
+        'acquire-timeout': data.advanced.lockAcquisitionTimeout,
+      },
+    };
+
+    data.basic.topology === 'Distributed'
+      ? ((cache = { [distributedCache]: generalCache }),
+        (cacheType = distributedCache))
+      : ((cache = { [replicatedCache]: generalCache }),
+        (cacheType = replicatedCache));
+
+    const expiration = () => {
+      cache[cacheType]['expiration'] = {
+        lifespan: data.basic.lifeSpan,
+        'max-idle': data.basic.maxIdle,
       };
-    } else if (data.basic.topology === 'Replicated') {
-      cache = {
-        'replicated-cache': {
-          mode: data.basic.mode,
-          statistics: data.basic.statistics,
-          encoding: {
-            'media-type': data.basic.encoding,
-          },
-          locking: {
-            isolation: data.advanced.isolationLevel,
-            striping: data.advanced.striping,
-            'concurrency-level': data.advanced.concurrencyLevel,
-            'acquire-timeout': data.advanced.lockAcquisitionTimeout,
-          },
-        },
+    };
+
+    const featureBounded = () => {
+      cache[cacheType]['memory'] = {
+        'max-count': data.feature.maxCount,
+        'max-size': data.feature.maxSize,
+        'when-full': data.feature.evictionStrategy,
       };
-    }
+    };
+
+    data.basic.expiration === true && expiration();
+    data.feature.cacheFeatureSelected.includes(CacheFeature.BOUNDED) &&
+      featureBounded();
     return JSON.stringify(cache, null, 2);
   }
 
   public static createCacheWithEditorStep(
     data: CacheEditorStep,
     cacheName: string
-  ) : Promise<ActionResponse> {
+  ): Promise<ActionResponse> {
     const name = cacheName.trim();
 
     // Validate Name
@@ -250,7 +263,7 @@ export class CacheConfigUtils {
   public static createCacheWithWizardStep(
     data: CacheConfiguration,
     cacheName: string
-  ) : Promise<ActionResponse> {
+  ): Promise<ActionResponse> {
     const name = cacheName.trim();
     const config = CacheConfigUtils.createCacheConfigFromData(data);
 

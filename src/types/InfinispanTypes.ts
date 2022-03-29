@@ -290,9 +290,19 @@ interface CacheEditorStep {
 interface BasicConfigurationStep {
   topology: string;
   mode: string;
-  numberOfOwners: number;
+  numberOfOwners: number | undefined;
   encoding: string;
   statistics: boolean;
+  expiration: boolean;
+  lifeSpan: number;
+  maxIdle: number;
+}
+
+interface CacheFeatureStep {
+  cacheFeatureSelected: [string];
+  maxSize: string | undefined;
+  maxCount: string | undefined;
+  evictionStrategy: string;
 }
 
 interface AdvancedConfigurationStep {
@@ -305,5 +315,6 @@ interface AdvancedConfigurationStep {
 
 interface CacheConfiguration {
   basic: BasicConfigurationStep;
+  feature: CacheFeatureStep;
   advanced: AdvancedConfigurationStep;
 }

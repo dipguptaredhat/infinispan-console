@@ -92,11 +92,8 @@ export enum EvictionStrategy {
 }
 
 export enum IsolationLevel {
-  NONE = 'NONE',
-  SERIALIZABLE = 'SERIALIZABLE',
   REPEATABLE_READ = 'REPEATABLE_READ',
   READ_COMMITTED = 'READ_COMMITTED',
-  READ_UNCOMMITTED = 'READ_UNCOMMITTED',
 }
 
 export enum StorageType {
@@ -107,4 +104,24 @@ export enum StorageType {
 export enum CacheMode {
   ASYNC = 'ASYNC',
   SYNC = 'SYNC',
+}
+
+export enum CacheFeature {
+  BOUNDED = 'Bounded',
+  INDEXED = 'Indexed',
+  PERSISTENCE = 'Persistence',
+  TRANSACTIONAL = 'Transactional',
+  SECURED = 'Secured',
+  BACKUPS = 'Backups',
+}
+
+export enum MaxSizeUnit {
+  KB = 'KB',
+  MB = 'MB',
+  GB = 'GB',
+  TB = 'TB',
+  KiB = 'KiB',
+  MiB = 'MiB',
+  GiB = 'GiB',
+  TiB = 'TiB',
 }

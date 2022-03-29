@@ -12,6 +12,7 @@ import {
     Switch,
     Text,
     TextContent,
+    TextInput,
     TextVariants,
 } from '@patternfly/react-core';
 import { CacheType, EncodingType, CacheMode } from "@services/infinispanRefData";
@@ -25,7 +26,6 @@ const ConfigurationBasic = (props:
     }) => {
 
     const { t } = useTranslation();
-    const brandname = t('brandname.brandname');
 
     // State for the form
     // Passed to the parent component
@@ -34,9 +34,16 @@ const ConfigurationBasic = (props:
     const [selectedNumberOwners, setSelectedNumberOwners] = useState(props.basicConfiguration.numberOfOwners);
     const [selectedEncodingCache, setSelectedEncodingCache] = useState(props.basicConfiguration.encoding);
     const [isStatistics, setIsStatistics] = useState(props.basicConfiguration.statistics);
+    const [isExpiration, setIsExpiration] = useState(props.basicConfiguration.expiration);
+    const [lifeSpan, setLifeSpan] = useState(props.basicConfiguration.lifeSpan);
+    const [maxIdle, setMaxIdle] = useState(props.basicConfiguration.maxIdle);
 
     // Helper State
     const [isOpenEncodingCache, setIsOpenEncodingCache] = useState(false);
+
+    useEffect(() => {
+        topology === 'Replicated' ? setSelectedNumberOwners(undefined) : setSelectedNumberOwners(1);
+    }, [])
 
     useEffect(() => {
         // Update the form when the state changes
@@ -45,10 +52,13 @@ const ConfigurationBasic = (props:
             mode: mode,
             numberOfOwners: selectedNumberOwners,
             encoding: selectedEncodingCache,
-            statistics: isStatistics
+            statistics: isStatistics,
+            expiration: isExpiration,
+            lifeSpan: lifeSpan,
+            maxIdle: maxIdle,
         });
 
-    }, [topology, mode, selectedNumberOwners, selectedEncodingCache, isStatistics]);
+    }, [topology, mode, selectedNumberOwners, selectedEncodingCache, isStatistics, isExpiration, lifeSpan, maxIdle]);
 
 
     // Helper function for Number Owners Selection
@@ -225,6 +235,42 @@ const ConfigurationBasic = (props:
         )
     }
 
+    // Form expiration
+    const formExpiration = () => {
+        return (
+            <FormGroup
+                isInline
+                isRequired
+                fieldId="form-expiration"
+            >
+                <Switch
+                    aria-label="expiration"
+                    id="expiration"
+                    isChecked={isExpiration}
+                    onChange={() => setIsExpiration(!isExpiration)}
+                    isReversed
+                />
+                <MoreInfoTooltip label={t('caches.create.configurations.basic.expiration-title')} toolTip={t('caches.create.configurations.basic.expiration-tooltip')} textComponent={TextVariants.h2} />
+            </FormGroup>
+        )
+    }
+
+    // Form expiration settings
+    const formExpirationSettings = () => {
+        return (
+            <React.Fragment>
+                <FormGroup fieldId='form-life-span'>
+                    <MoreInfoTooltip label={t('caches.create.configurations.basic.lifespan')} toolTip={t('caches.create.configurations.basic.lifespan-tooltip')} textComponent={TextVariants.h3} />
+                    <TextInput value={lifeSpan} type="number" onChange={(value) => setLifeSpan(parseInt(value))} aria-label="life-span-input" />
+                </FormGroup>
+                <FormGroup fieldId='form-max-idle'>
+                    <MoreInfoTooltip label={t('caches.create.configurations.basic.max-idle')} toolTip={t('caches.create.configurations.basic.max-idle-tooltip')} textComponent={TextVariants.h3} />
+                    <TextInput value={maxIdle} type="number" onChange={(value) => setMaxIdle(parseInt(value))} aria-label="max-idle-input" />
+                </FormGroup>
+            </React.Fragment>
+        )
+    }
+
     return (
         <Form>
 
@@ -234,8 +280,12 @@ const ConfigurationBasic = (props:
             {topology as CacheType == CacheType.Distributed && formNumberOwners()}
 
             <Divider />
-
             {formEncodingCache()}
+
+            <Divider />
+            {formExpiration()}
+            {isExpiration && formExpirationSettings()}
+
         </Form>
     );
 };

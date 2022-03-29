@@ -174,7 +174,27 @@
           "statistics-title": "Statistics",
           "statistics-tooltip": "Enable statistics for your cache.",
           "encoding-cache-title": "Select an encoding",
-          "encoding-cache-tooltip": "Choose a media type that describes data that you store in the cache. Use ProtoStream encoding for optimal performance and interoperability between client applications."
+          "encoding-cache-tooltip": "Choose a media type that describes data that you store in the cache. Use ProtoStream encoding for optimal performance and interoperability between client applications.",
+          "expiration-title": "Expiration",
+          "expiration-tooltip": "Expiration tooltip",
+          "lifespan": "Lifespan",
+          "lifespan-tooltip": "Set the lifespan of entries in milliseconds.",
+          "max-idle": "Max idle",
+          "max-idle-tooltip": "Set the maximum idle time of entries in milliseconds."
+        },
+        "feature": {
+          "nav-title": "Cache feature",
+          "page-title": "Cache feature",
+          "cache-feature-list": "Cache features",
+          "cache-feature-list-tooltip": "Select cache features.",
+          "cache-feature-list-placeholder": "Choose features",
+          "bounded": "Bounded",
+          "max-size": "Max size",
+          "max-size-tooltip": "Max size of the cache.",
+          "max-count": "Max count",
+          "max-count-tooltip": "Max count of the cache.",
+          "eviction-strategy": "Eviction strategy",
+          "eviction-strategy-tooltip": "Eviction strategy of the cache."
         },
         "advanced-options": {
           "nav-title": "Advanced options",
