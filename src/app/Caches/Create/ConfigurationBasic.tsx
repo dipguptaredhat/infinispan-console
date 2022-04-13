@@ -295,7 +295,7 @@ const ConfigurationBasic = (props:
                     <InputGroup>
                         <Grid>
                             <GridItem span={8}>
-                                <TextInput value={lifeSpanNumber} type="number" onChange={(value) => setLifeSpanNumber(parseInt(value))} aria-label="life-span-input" />
+                                <TextInput min={-1} value={lifeSpanNumber} type="number" onChange={(value) => setLifeSpanNumber(parseInt(value))} aria-label="life-span-input" />
                             </GridItem>
                             <GridItem span={4}>
                                 <Select
@@ -323,7 +323,7 @@ const ConfigurationBasic = (props:
                     <InputGroup>
                         <Grid>
                             <GridItem span={8}>
-                                <TextInput value={maxIdleNumber} type="number" onChange={(value) => setMaxIdleNumber(parseInt(value))} aria-label="life-span-input" />
+                                <TextInput min={-1} value={maxIdleNumber} type="number" onChange={(value) => setMaxIdleNumber(parseInt(value))} aria-label="life-span-input" />
                             </GridItem>
                             <GridItem span={4}>
                                 <Select

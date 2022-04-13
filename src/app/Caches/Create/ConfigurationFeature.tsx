@@ -160,7 +160,7 @@ const ConfigurationFeature = (props: {
                     <InputGroup>
                         <Grid>
                             <GridItem span={8}>
-                                <TextInput isDisabled={maxCount !== undefined} value={maxSizeNumber} type="number" onChange={(value) => setMaxSizeNumber(value)} aria-label="max-size-number-input" />
+                                <TextInput min={0} isDisabled={maxCount !== undefined} value={maxSizeNumber} type="number" onChange={(value) => setMaxSizeNumber(value)} aria-label="max-size-number-input" />
                             </GridItem>
                             <GridItem span={4}>
                                 <Select
@@ -187,7 +187,7 @@ const ConfigurationFeature = (props: {
                     helperTextInvalid={t('caches.create.configurations.feature.max-count-helper-invalid')}
                 >
                     <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip')} textComponent={TextVariants.h3} />
-                    <TextInput isDisabled={maxSize !== undefined} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
+                    <TextInput min={0} isDisabled={maxSize !== undefined} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
                 </FormGroup>
                 <FormGroup fieldId='form-eviction-strategy'>
                     <MoreInfoTooltip label={t('caches.create.configurations.feature.eviction-strategy')} toolTip={t('caches.create.configurations.feature.eviction-strategy-tooltip')} textComponent={TextVariants.h3} />
