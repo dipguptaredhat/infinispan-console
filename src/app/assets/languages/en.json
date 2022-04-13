@@ -178,9 +178,11 @@
           "expiration-title": "Expiration",
           "expiration-tooltip": "Expiration tooltip",
           "lifespan": "Lifespan",
-          "lifespan-tooltip": "Set the lifespan of entries in milliseconds.",
+          "lifespan-tooltip": "Set the lifespan",
+          "lifespan-helper-invalid": "Minimum Life span can be -1",
           "max-idle": "Max idle",
-          "max-idle-tooltip": "Set the maximum idle time of entries in milliseconds."
+          "max-idle-tooltip": "Set the maximum idle time",
+          "max-idle-helper-invalid": "Minimum Max Idle Time can be -1"
         },
         "feature": {
           "nav-title": "Cache feature",
@@ -191,8 +193,10 @@
           "bounded": "Bounded",
           "max-size": "Max size",
           "max-size-tooltip": "Max size of the cache.",
+          "max-size-helper-invalid": "Max size must be a positive number",
           "max-count": "Max count",
           "max-count-tooltip": "Max count of the cache.",
+          "max-count-helper-invalid": "Max count must be a positive number",
           "eviction-strategy": "Eviction strategy",
           "eviction-strategy-tooltip": "Eviction strategy of the cache."
         },

@@ -125,3 +125,10 @@ export enum MaxSizeUnit {
   GiB = 'GiB',
   TiB = 'TiB',
 }
+
+export enum TimeUnits {
+  milliseconds = 'milliseconds',
+  seconds = 'seconds',
+  minutes = 'minutes',
+  hours = 'hours',
+}

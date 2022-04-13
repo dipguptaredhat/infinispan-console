@@ -294,8 +294,10 @@ interface BasicConfigurationStep {
   encoding: string;
   statistics: boolean;
   expiration: boolean;
-  lifeSpan: number;
-  maxIdle: number;
+  lifeSpanNumber: number;
+  lifeSpanUnit: string;
+  maxIdleNumber: number;
+  maxIdleUnit: string;
 }
 
 interface CacheFeatureStep {

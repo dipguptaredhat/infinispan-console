@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useApiAlert } from '@app/utils/useApiAlert';
 import { CacheConfigUtils } from '@services/cacheConfigUtils';
 import { useTranslation } from 'react-i18next';
-import { CacheType, EncodingType, IsolationLevel, StorageType, CacheMode, EvictionStrategy } from "@services/infinispanRefData";
+import { CacheType, EncodingType, IsolationLevel, StorageType, CacheMode, EvictionStrategy, TimeUnits } from "@services/infinispanRefData";
 import GettingStarted from './GettingStarted';
 import CacheEditor from './CacheEditor';
 import ConfigurationBasic from './ConfigurationBasic';
@@ -39,8 +39,10 @@ const BasicConfigurationInitialState: BasicConfigurationStep = {
     encoding: EncodingType.Protobuf,
     statistics: true,
     expiration: false,
-    lifeSpan: -1,
-    maxIdle: -1,
+    lifeSpanNumber: -1,
+    lifeSpanUnit: TimeUnits.milliseconds,
+    maxIdleNumber: -1,
+    maxIdleUnit: TimeUnits.milliseconds,
 }
 
 const CacheFeatureInitialState: CacheFeatureStep = {
@@ -188,9 +190,15 @@ const CreateCacheWizard = (props) => {
             {
                 id: 3,
                 name: t('caches.create.configurations.basic.nav-title'),
-                component: (<ConfigurationBasic basicConfiguration={basicConfiguration} basicConfigurationModifier={setBasicConfiguration} />)
+                component: (<ConfigurationBasic basicConfiguration={basicConfiguration} basicConfigurationModifier={setBasicConfiguration} handleIsFormValid={setIsFormValid} />),
+                enableNext: isFormValid,
             },
-            { id: 4, name: "Cache Feature", component: <ConfigurationFeature cacheFeature={cacheFeature} cacheFeatureModifier={setCacheFeature} /> },
+            {
+                id: 4,
+                name: "Cache Feature",
+                component: <ConfigurationFeature cacheFeature={cacheFeature} cacheFeatureModifier={setCacheFeature} handleIsFormValid={setIsFormValid} />,
+                enableNext: isFormValid,
+            },
             { id: 5, name: t('caches.create.configurations.advanced-options.nav-title'), component: <AdvancedOptions advancedOptions={advancedOptions} advancedOptionsModifier={setAdvancedOptions} /> },
         ]
     };

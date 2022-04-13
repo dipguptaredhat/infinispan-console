@@ -2,6 +2,7 @@ import {
   CacheFeature,
   ContentType,
   EncodingType,
+  TimeUnits,
 } from '@services/infinispanRefData';
 import { Either, left, right } from '@services/either';
 import { ConsoleServices } from '@services/ConsoleServices';
@@ -180,10 +181,28 @@ export class CacheConfigUtils {
       : ((cache = { [replicatedCache]: generalCache }),
         (cacheType = replicatedCache));
 
+    const convertToMilliseconds = (time: number, format: string) => {
+      if (format === TimeUnits.seconds) {
+        return time * 1000;
+      } else if (format === TimeUnits.minutes) {
+        return time * 1000 * 60;
+      } else if (format === TimeUnits.hours) {
+        return time * 1000 * 60 * 60;
+      } else {
+        return time;
+      }
+    };
+
     const expiration = () => {
       cache[cacheType]['expiration'] = {
-        lifespan: data.basic.lifeSpan,
-        'max-idle': data.basic.maxIdle,
+        lifespan: convertToMilliseconds(
+          data.basic.lifeSpanNumber,
+          data.basic.lifeSpanUnit
+        ),
+        'max-idle': convertToMilliseconds(
+          data.basic.maxIdleNumber,
+          data.basic.maxIdleUnit
+        ),
       };
     };
 

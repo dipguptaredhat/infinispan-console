@@ -20,7 +20,8 @@ import { MoreInfoTooltip } from '@app/Common/MoreInfoTooltip';
 
 const ConfigurationFeature = (props: {
     cacheFeature: CacheFeatureStep,
-    cacheFeatureModifier: (CacheFeatureStep) => void
+    cacheFeatureModifier: (CacheFeatureStep) => void,
+    handleIsFormValid: (isFormValid: boolean) => void
 }) => {
 
     const { t } = useTranslation();
@@ -67,6 +68,14 @@ const ConfigurationFeature = (props: {
             maxCount: maxCount,
             evictionStrategy: evictionStrategy,
         });
+
+        if (maxSizeNumber || maxCount)
+            props.handleIsFormValid(parseInt(maxSizeNumber) >= 0 || parseInt(maxCount) >= 0);
+        else if (cacheFeatureSelected.length < 1)
+            props.handleIsFormValid(true);
+        else
+            props.handleIsFormValid(false);
+
     }, [cacheFeatureSelected, maxSize, maxCount, evictionStrategy]);
 
     const onSelect = (event, selection) => {
@@ -144,6 +153,8 @@ const ConfigurationFeature = (props: {
                 <FormGroup
                     isRequired
                     fieldId="max-size"
+                    validated={maxCount || (maxSizeNumber && parseInt(maxSizeNumber) >= 0) ? 'default' : 'error'}
+                    helperTextInvalid={t('caches.create.configurations.feature.max-size-helper-invalid')}
                 >
                     <MoreInfoTooltip label={t('caches.create.configurations.feature.max-size')} toolTip={t('caches.create.configurations.feature.max-size-tooltip')} textComponent={TextVariants.h3} />
                     <InputGroup>
@@ -172,6 +183,8 @@ const ConfigurationFeature = (props: {
                 <FormGroup
                     isRequired
                     fieldId="max-count"
+                    validated={maxSizeNumber || (maxCount && parseInt(maxCount) >= 0) ? 'default' : 'error'}
+                    helperTextInvalid={t('caches.create.configurations.feature.max-count-helper-invalid')}
                 >
                     <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip')} textComponent={TextVariants.h3} />
                     <TextInput isDisabled={maxSize !== undefined} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
