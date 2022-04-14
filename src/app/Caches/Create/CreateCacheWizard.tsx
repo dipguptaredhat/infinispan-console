@@ -64,6 +64,7 @@ const AdvancedOptionsInitialState: AdvancedConfigurationStep = {
 const CreateCacheWizard = (props) => {
     const { addAlert } = useApiAlert();
     const { t } = useTranslation();
+    const brandname = t('brandname.brandname');
 
     // State for wizard steps
     const [stateObj, setStateObj] = useStateCallback({
@@ -196,7 +197,7 @@ const CreateCacheWizard = (props) => {
             },
             {
                 id: 4,
-                name: "Cache Feature",
+                name: t('caches.create.configurations.feature.nav-title', { brandname: brandname }),
                 component: <ConfigurationFeature cacheFeature={cacheFeature} cacheFeatureModifier={setCacheFeature} handleIsFormValid={setIsFormValid} />,
                 enableNext: isFormValid,
             },

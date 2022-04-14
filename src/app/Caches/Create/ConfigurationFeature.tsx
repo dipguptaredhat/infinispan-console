@@ -26,6 +26,7 @@ const ConfigurationFeature = (props: {
 }) => {
 
     const { t } = useTranslation();
+    const brandname = t('brandname.brandname');
 
     const [cacheFeatureSelected, setCacheFeatureSelected] = useState(props.cacheFeature.cacheFeatureSelected);
 
@@ -132,10 +133,10 @@ const ConfigurationFeature = (props: {
     const formCacheFeatureSelect = () => {
         return (
             <FormGroup fieldId='cache-feature'>
-                <MoreInfoTooltip label={t('caches.create.configurations.feature.cache-feature-list')} toolTip={t('caches.create.configurations.feature.cache-feature-list-tooltip')} textComponent={TextVariants.h3} />
+                <MoreInfoTooltip label={t('caches.create.configurations.feature.cache-feature-list', { brandname: brandname })} toolTip={t('caches.create.configurations.feature.cache-feature-list-tooltip')} textComponent={TextVariants.h2} />
                 <Select
                     variant={SelectVariant.typeaheadMulti}
-                    typeAheadAriaLabel="Choose features"
+                    typeAheadAriaLabel={t('caches.create.configurations.feature.cache-feature-list-typeahead')}
                     onToggle={() => setIsOpenCacheFeature(!isOpenCacheFeature)}
                     onSelect={onSelect}
                     onClear={clearSelection}
@@ -169,7 +170,7 @@ const ConfigurationFeature = (props: {
             <React.Fragment>
                 <Divider />
                 <TextContent>
-                    <Text component={TextVariants.h2}>Bounded</Text>
+                    <MoreInfoTooltip label={t('caches.create.configurations.feature.bounded')} toolTip={t('caches.create.configurations.feature.bounded-tooltip', { brandname: brandname })} textComponent={TextVariants.h2} />
                 </TextContent>
 
                 <FormGroup
@@ -208,7 +209,7 @@ const ConfigurationFeature = (props: {
                         validated={!maxSize || (maxSizeNumber && parseInt(maxSizeNumber) >= 0) ? 'default' : 'error'}
                         helperTextInvalid={t('caches.create.configurations.feature.max-size-helper-invalid')}
                     >
-                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-size')} toolTip={t('caches.create.configurations.feature.max-size-tooltip')} textComponent={TextVariants.h3} />
+                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-size')} toolTip={t('caches.create.configurations.feature.max-size-tooltip', { brandname: brandname })} textComponent={TextVariants.h3} />
                         <InputGroup>
                             <Grid>
                                 <GridItem span={8}>
@@ -239,13 +240,13 @@ const ConfigurationFeature = (props: {
                         validated={!maxCount || (maxCount && parseInt(maxCount) >= 0) ? 'default' : 'error'}
                         helperTextInvalid={t('caches.create.configurations.feature.max-count-helper-invalid')}
                     >
-                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip')} textComponent={TextVariants.h3} />
+                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip', { brandname: brandname })} textComponent={TextVariants.h3} />
                         <TextInput min={0} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
                     </FormGroup>
                 }
 
                 <FormGroup fieldId='form-eviction-strategy'>
-                    <MoreInfoTooltip label={t('caches.create.configurations.feature.eviction-strategy')} toolTip={t('caches.create.configurations.feature.eviction-strategy-tooltip')} textComponent={TextVariants.h3} />
+                    <MoreInfoTooltip label={t('caches.create.configurations.feature.eviction-strategy')} toolTip={t('caches.create.configurations.feature.eviction-strategy-tooltip', { brandname: brandname })} textComponent={TextVariants.h3} />
                     <Select
                         variant={SelectVariant.single}
                         aria-label="eviction-strategy-select"
@@ -265,10 +266,6 @@ const ConfigurationFeature = (props: {
 
     return (
         <Form>
-            <TextContent>
-                <Text component={TextVariants.h1}>{t('caches.create.configurations.feature.page-title')}</Text>
-            </TextContent>
-
             {formCacheFeatureSelect()}
             {cacheFeatureSelected.includes(CacheFeature.BOUNDED) && formBoundedCache()}
         </Form>
