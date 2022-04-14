@@ -10,11 +10,12 @@ import {
     TextContent,
     TextVariants,
     TextInput,
+    Radio,
     Select,
     SelectOption,
     SelectVariant,
 } from '@patternfly/react-core';
-import { CacheFeature, MaxSizeUnit, EvictionStrategy } from "@services/infinispanRefData";
+import { CacheFeature, MaxSizeUnit, EvictionStrategy, EvictionType } from "@services/infinispanRefData";
 import { useTranslation } from 'react-i18next';
 import { MoreInfoTooltip } from '@app/Common/MoreInfoTooltip';
 
@@ -29,6 +30,7 @@ const ConfigurationFeature = (props: {
     const [cacheFeatureSelected, setCacheFeatureSelected] = useState(props.cacheFeature.cacheFeatureSelected);
 
     //Bounded Cache
+    const [evictionType, setEvictionType] = useState<'size' | 'count'>(props.cacheFeature.evictionType);
     const [maxSize, setMaxSize] = useState<string | undefined>(props.cacheFeature.maxSize);
     const [maxCount, setMaxCount] = useState<string | undefined>(props.cacheFeature.maxCount);
     const [evictionStrategy, setEvictionStrategy] = useState<string>(props.cacheFeature.evictionStrategy);
@@ -48,12 +50,18 @@ const ConfigurationFeature = (props: {
             setMaxSizeNumber(num);
             setMaxSizeUnit(MaxSizeUnit[unit]);
         }
+        else {
+            setMaxSizeNumber(undefined);
+        }
     }, [])
 
     useEffect(() => {
+        // Update maxSize string
         if (maxSizeNumber) {
             setMaxSize(maxSizeNumber + maxSizeUnit);
         }
+
+        // Update maxSize number and count if string is null
         if (maxSizeNumber === '') {
             setMaxSize(undefined);
             setMaxSizeNumber(undefined);
@@ -62,21 +70,35 @@ const ConfigurationFeature = (props: {
     }, [maxSizeNumber, maxSizeUnit, maxCount])
 
     useEffect(() => {
+        // Update when evictionType changed
+        if (evictionType === EvictionType.count) {
+            setMaxSize(undefined);
+            setMaxSizeNumber(undefined);
+        }
+        else if (evictionType === EvictionType.size) {
+            setMaxCount(undefined);
+        }
+    }, [evictionType])
+
+    useEffect(() => {
         props.cacheFeatureModifier({
             cacheFeatureSelected: cacheFeatureSelected,
+            evictionType: evictionType,
             maxSize: maxSize,
             maxCount: maxCount,
             evictionStrategy: evictionStrategy,
         });
 
-        if (maxSizeNumber || maxCount)
-            props.handleIsFormValid(parseInt(maxSizeNumber) >= 0 || parseInt(maxCount) >= 0);
+        if (evictionType === EvictionType.size)
+            props.handleIsFormValid(parseInt(maxSizeNumber) >= 0)
+        else if (evictionType === EvictionType.count)
+            props.handleIsFormValid(parseInt(maxCount) >= 0)
         else if (cacheFeatureSelected.length < 1)
             props.handleIsFormValid(true);
         else
             props.handleIsFormValid(false);
 
-    }, [cacheFeatureSelected, maxSize, maxCount, evictionStrategy]);
+    }, [cacheFeatureSelected, evictionType, maxSize, maxCount, evictionStrategy]);
 
     const onSelect = (event, selection) => {
         if (cacheFeatureSelected.includes(selection)) {
@@ -151,44 +173,77 @@ const ConfigurationFeature = (props: {
                 </TextContent>
 
                 <FormGroup
+                    isInline
                     isRequired
-                    fieldId="max-size"
-                    validated={maxCount || (maxSizeNumber && parseInt(maxSizeNumber) >= 0) ? 'default' : 'error'}
-                    helperTextInvalid={t('caches.create.configurations.feature.max-size-helper-invalid')}
+                    fieldId="radio-size-count"
                 >
-                    <MoreInfoTooltip label={t('caches.create.configurations.feature.max-size')} toolTip={t('caches.create.configurations.feature.max-size-tooltip')} textComponent={TextVariants.h3} />
-                    <InputGroup>
-                        <Grid>
-                            <GridItem span={8}>
-                                <TextInput min={0} isDisabled={maxCount !== undefined} value={maxSizeNumber} type="number" onChange={(value) => setMaxSizeNumber(value)} aria-label="max-size-number-input" />
-                            </GridItem>
-                            <GridItem span={4}>
-                                <Select
-                                    variant={SelectVariant.single}
-                                    isDisabled={maxCount !== undefined}
-                                    aria-label="max-size-unit-input"
-                                    onToggle={() => setIsOpenMaxSizeUnit(!isOpenMaxSizeUnit)}
-                                    onSelect={onSelectMaxCountUnit}
-                                    selections={maxSizeUnit}
-                                    isOpen={isOpenMaxSizeUnit}
-                                    aria-labelledby="toggle-id-max-size-unit"
-                                >
-                                    {unitOptions()}
-                                </Select>
-                            </GridItem>
+                    <Radio
+                        name="radio-size-count"
+                        id="size"
+                        onChange={() => setEvictionType(EvictionType.size)}
+                        isChecked={evictionType === EvictionType.size}
+                        label={
+                            <TextContent>
+                                <Text component={TextVariants.h4}>{t('caches.create.configurations.feature.radio-max-size')}</Text>
+                            </TextContent>
+                        }
+                    />
+                    <Radio
+                        name="radio-size-count"
+                        id="count"
+                        onChange={() => setEvictionType(EvictionType.count)}
+                        isChecked={evictionType === EvictionType.count}
+                        label={
+                            <TextContent>
+                                <Text component={TextVariants.h4}>{t('caches.create.configurations.feature.radio-max-count')}</Text>
+                            </TextContent>
+                        }
+                    />
+                </FormGroup>
 
-                        </Grid>
-                    </InputGroup>
-                </FormGroup>
-                <FormGroup
-                    isRequired
-                    fieldId="max-count"
-                    validated={maxSizeNumber || (maxCount && parseInt(maxCount) >= 0) ? 'default' : 'error'}
-                    helperTextInvalid={t('caches.create.configurations.feature.max-count-helper-invalid')}
-                >
-                    <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip')} textComponent={TextVariants.h3} />
-                    <TextInput min={0} isDisabled={maxSize !== undefined} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
-                </FormGroup>
+                {evictionType === 'size' &&
+                    <FormGroup
+                        isRequired
+                        fieldId="max-size"
+                        validated={!maxSize || (maxSizeNumber && parseInt(maxSizeNumber) >= 0) ? 'default' : 'error'}
+                        helperTextInvalid={t('caches.create.configurations.feature.max-size-helper-invalid')}
+                    >
+                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-size')} toolTip={t('caches.create.configurations.feature.max-size-tooltip')} textComponent={TextVariants.h3} />
+                        <InputGroup>
+                            <Grid>
+                                <GridItem span={8}>
+                                    <TextInput min={0} value={maxSizeNumber} type="number" onChange={(value) => setMaxSizeNumber(value)} aria-label="max-size-number-input" />
+                                </GridItem>
+                                <GridItem span={4}>
+                                    <Select
+                                        variant={SelectVariant.single}
+                                        aria-label="max-size-unit-input"
+                                        onToggle={() => setIsOpenMaxSizeUnit(!isOpenMaxSizeUnit)}
+                                        onSelect={onSelectMaxCountUnit}
+                                        selections={maxSizeUnit}
+                                        isOpen={isOpenMaxSizeUnit}
+                                        aria-labelledby="toggle-id-max-size-unit"
+                                    >
+                                        {unitOptions()}
+                                    </Select>
+                                </GridItem>
+                            </Grid>
+                        </InputGroup>
+                    </FormGroup>
+                }
+
+                {evictionType === 'count' &&
+                    <FormGroup
+                        isRequired
+                        fieldId="max-count"
+                        validated={!maxCount || (maxCount && parseInt(maxCount) >= 0) ? 'default' : 'error'}
+                        helperTextInvalid={t('caches.create.configurations.feature.max-count-helper-invalid')}
+                    >
+                        <MoreInfoTooltip label={t('caches.create.configurations.feature.max-count')} toolTip={t('caches.create.configurations.feature.max-count-tooltip')} textComponent={TextVariants.h3} />
+                        <TextInput min={0} value={maxCount} type="number" onChange={(value) => setMaxCount(value)} aria-label="max-count-input" />
+                    </FormGroup>
+                }
+
                 <FormGroup fieldId='form-eviction-strategy'>
                     <MoreInfoTooltip label={t('caches.create.configurations.feature.eviction-strategy')} toolTip={t('caches.create.configurations.feature.eviction-strategy-tooltip')} textComponent={TextVariants.h3} />
                     <Select
@@ -203,6 +258,7 @@ const ConfigurationFeature = (props: {
                         {evictionStrategyOptions()}
                     </Select>
                 </FormGroup>
+
             </React.Fragment>
         )
     }

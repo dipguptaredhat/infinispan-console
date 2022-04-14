@@ -191,6 +191,8 @@
           "cache-feature-list-tooltip": "Select cache features.",
           "cache-feature-list-placeholder": "Choose features",
           "bounded": "Bounded",
+          "radio-max-size": "Max size",
+          "radio-max-count": "Max count",
           "max-size": "Max size",
           "max-size-tooltip": "Max size of the cache.",
           "max-size-helper-invalid": "Max size must be a positive number",

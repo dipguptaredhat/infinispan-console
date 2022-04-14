@@ -302,6 +302,7 @@ interface BasicConfigurationStep {
 
 interface CacheFeatureStep {
   cacheFeatureSelected: [string];
+  evictionType: 'size' | 'count';
   maxSize: string | undefined;
   maxCount: string | undefined;
   evictionStrategy: string;

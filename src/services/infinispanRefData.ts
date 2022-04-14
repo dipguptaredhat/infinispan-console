@@ -132,3 +132,8 @@ export enum TimeUnits {
   minutes = 'minutes',
   hours = 'hours',
 }
+
+export enum EvictionType {
+  size = 'size',
+  count = 'count',
+}

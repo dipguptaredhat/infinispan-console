@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useApiAlert } from '@app/utils/useApiAlert';
 import { CacheConfigUtils } from '@services/cacheConfigUtils';
 import { useTranslation } from 'react-i18next';
-import { CacheType, EncodingType, IsolationLevel, StorageType, CacheMode, EvictionStrategy, TimeUnits } from "@services/infinispanRefData";
+import { CacheType, EncodingType, IsolationLevel, StorageType, CacheMode, EvictionStrategy, TimeUnits, EvictionType } from "@services/infinispanRefData";
 import GettingStarted from './GettingStarted';
 import CacheEditor from './CacheEditor';
 import ConfigurationBasic from './ConfigurationBasic';
@@ -47,6 +47,7 @@ const BasicConfigurationInitialState: BasicConfigurationStep = {
 
 const CacheFeatureInitialState: CacheFeatureStep = {
     cacheFeatureSelected: [],
+    evictionType: EvictionType.size,
     maxSize: undefined,
     maxCount: undefined,
     evictionStrategy: EvictionStrategy.NONE,
