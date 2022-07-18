@@ -243,18 +243,16 @@ export class CacheService {
     create: boolean
   ): Promise<ActionResponse> {
     let headers = new Headers();
-    let keyContentTypeHeader =
-      ContentTypeHeaderMapper.fromEncodingAndContentTypeToHeader(
-        cacheEncoding.key as EncodingType,
-        key,
-        keyContentType
-      );
-    let contentTypeHeader =
-      ContentTypeHeaderMapper.fromEncodingAndContentTypeToHeader(
-        cacheEncoding.value as EncodingType,
-        value,
-        valueContentType
-      );
+    let keyContentTypeHeader = ContentTypeHeaderMapper.fromEncodingAndContentTypeToHeader(
+      cacheEncoding.key as EncodingType,
+      key,
+      keyContentType
+    );
+    let contentTypeHeader = ContentTypeHeaderMapper.fromEncodingAndContentTypeToHeader(
+      cacheEncoding.value as EncodingType,
+      value,
+      valueContentType
+    );
     headers.append('Key-Content-Type', keyContentTypeHeader);
     headers.append('Content-Type', contentTypeHeader);
     if (timeToLive.length > 0) headers.append('timeToLiveSeconds', timeToLive);
@@ -387,8 +385,9 @@ export class CacheService {
       }
       keyForURL = keyProtobuffed.value;
     } else {
-      keyContentTypeHeader =
-        ContentTypeHeaderMapper.fromContentType(keyContentType);
+      keyContentTypeHeader = ContentTypeHeaderMapper.fromContentType(
+        keyContentType
+      );
       keyForURL = key;
     }
 
@@ -491,8 +490,9 @@ export class CacheService {
       }
       keyForURL = keyProtobuffed.value;
     } else {
-      keyContentTypeHeader =
-        ContentTypeHeaderMapper.fromContentType(keyContentType);
+      keyContentTypeHeader = ContentTypeHeaderMapper.fromContentType(
+        keyContentType
+      );
       keyForURL = key;
     }
 
@@ -677,5 +677,44 @@ export class CacheService {
       customHeaders: customHeaders,
       body: config,
     });
+  }
+
+  public async getDistribution(): Promise<
+    Either<ActionResponse, DataDistribution[]>
+  > {
+    const dataDistrib = <DataDistribution[]>[
+      {
+        node_name: 'NodeA',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 2,
+        total_entries: 3,
+      },
+      {
+        node_name: 'NodeB',
+        node_addresses: ['127.0.0.1:44187'],
+        memory_entries: 5,
+        total_entries: 5,
+      },
+      {
+        node_name: 'NodeC',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 3,
+        total_entries: 4,
+      },
+      {
+        node_name: 'NodeD',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 2,
+        total_entries: 7,
+      },
+      {
+        node_name: 'NodeE',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 1,
+      },
+    ];
+
+    return Promise.resolve(right(dataDistrib));
   }
 }

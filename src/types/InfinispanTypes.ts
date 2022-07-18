@@ -447,3 +447,10 @@ interface CacheConfiguration {
   feature: CacheFeatureStep;
   advanced: AdvancedConfigurationStep;
 }
+
+interface DataDistribution {
+  node_name: string;
+  node_addresses: string[];
+  memory_entries: number;
+  total_entries: number;
+}
