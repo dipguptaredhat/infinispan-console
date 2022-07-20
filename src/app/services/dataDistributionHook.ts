@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { ConsoleServices } from '@services/ConsoleServices';
 
-export function useDataDistribution() {
-  const [dataDistribution, setDataDistribution] = useState<
-    DataDistribution[]
-  >();
+export function useDataDistribution(cacheName: string) {
+  const [dataDistribution, setDataDistribution] =
+    useState<DataDistribution[]>();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (loading) {
       ConsoleServices.caches()
-        .getDistribution()
+        .getDistribution(cacheName)
         .then((r) => {
           if (r.isRight()) {
             setDataDistribution(r.value);
