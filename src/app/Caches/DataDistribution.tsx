@@ -117,6 +117,7 @@ const DataDistribution = (props: {
                 </Level>
             </CardTitle>
             <CardBody>{buildCardContent()}</CardBody>
+            {console.log("dataDistribution: ", dataDistribution)}
         </Card>
     );
 };
