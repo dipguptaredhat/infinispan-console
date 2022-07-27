@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Card,
     CardBody,
@@ -9,6 +9,11 @@ import {
     SelectOption,
     SelectVariant,
     Spinner,
+    Pagination,
+    Toolbar,
+    ToolbarContent,
+    ToolbarItem,
+    ToolbarItemVariant,
 } from '@patternfly/react-core';
 import { Chart, ChartBar, ChartGroup, ChartVoronoiContainer } from '@patternfly/react-charts';
 import { TableErrorState } from '@app/Common/TableErrorState';
@@ -16,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useDataDistribution } from '@app/services/dataDistributionHook';
 import { DataDistributionStatsOption } from "@services/infinispanRefData";
 import { PopoverHelp } from '@app/Common/PopoverHelp';
+import { TableComposable, TableVariant, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 
 const DataDistribution = (props: {
     cacheName: string;
@@ -23,14 +29,49 @@ const DataDistribution = (props: {
     const { t } = useTranslation();
     const brandname = t('brandname.brandname');
 
+    const { dataDistribution, loading, error } = useDataDistribution(props.cacheName);
+
     const [isOpenStatsOptions, setIsOpenStatsOptions] = useState<boolean>(false);
     const [statsOption, setStatsOption] = useState<string>(DataDistributionStatsOption.Entries);
 
-    const { dataDistribution, loading, error } = useDataDistribution(props.cacheName);
+    const [pagination, setPagination] = useState({
+        page: 1,
+        perPage: 10,
+    });
+    const [rows, setRows] = useState<DataDistribution[] | any>([]);
+
+    useEffect(() => {
+        if (dataDistribution) {
+            const initSlice = (pagination.page - 1) * pagination.perPage;
+            setRows(dataDistribution.slice(initSlice, initSlice + pagination.perPage));
+        }
+    }, [loading, dataDistribution, error, pagination]);
 
     const onSelectStatsOptions = (event, selection, isPlaceholder) => {
         setStatsOption(selection);
         setIsOpenStatsOptions(false);
+    };
+
+    const onSetPage = (_event, pageNumber) => {
+        setPagination({
+            page: pageNumber,
+            perPage: pagination.perPage,
+        });
+
+        const initSlice = (pageNumber - 1) * pagination.perPage;
+        setRows(
+            dataDistribution?.slice(initSlice, initSlice + pagination.perPage)
+        );
+    };
+
+    const onPerPageSelect = (_event, perPage) => {
+        setPagination({
+            page: 1,
+            perPage: perPage,
+        })
+
+        const initSlice = (pagination.page - 1) * perPage;
+        setRows(dataDistribution?.slice(initSlice, initSlice + perPage));
     };
 
     const buildCardContent = () => {
@@ -46,13 +87,15 @@ const DataDistribution = (props: {
             )
         }
 
+        let size = 0
+
         const data = dataDistribution?.map((item) => {
+            size++;
             const yaxis = statsOption === DataDistributionStatsOption.Entries ? item.total_entries : item.memory_entries;
             return { name: item.node_name, y: yaxis, x: item.node_name }
-        }
-        );
+        });
 
-        return (
+        const distributionChart = (
             <div style={{ height: '450px', width: '700px', margin: "auto" }}>
                 <Chart
                     ariaDesc={t('caches.cache-metrics.data-distribution')}
@@ -77,20 +120,71 @@ const DataDistribution = (props: {
                     </ChartGroup>
                 </Chart>
             </div>
-        );
+        )
+
+        const columnNames = {
+            nodeName: t('caches.cache-metrics.data-distribution-node-name'),
+            entries: t('caches.cache-metrics.data-distribution-option-entries'),
+            entryInMemory: t('caches.cache-metrics.data-distribution-option-entries-in-memory'),
+            memory: t('caches.cache-metrics.data-distribution-option-memory')
+        };
+
+        const distributionTable = (
+            <div>
+                <Toolbar id="distribution-table-toolbar">
+                    <ToolbarContent>
+                        <ToolbarItem variant={ToolbarItemVariant.pagination}>
+                            <Pagination
+                                itemCount={size}
+                                perPage={pagination.perPage}
+                                page={pagination.page}
+                                onSetPage={onSetPage}
+                                widgetId="distribution-table-pagination"
+                                onPerPageSelect={onPerPageSelect}
+                                isCompact
+                            />
+                        </ToolbarItem>
+                    </ToolbarContent>
+                </Toolbar>
+                <TableComposable
+                    aria-label="Data Distribution Table"
+                    variant={TableVariant.compact}
+                    borders
+                >
+                    <Thead>
+                        <Tr>
+                            <Th>{columnNames.nodeName}</Th>
+                            <Th>{columnNames.entries}</Th>
+                            <Th>{columnNames.memory}</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {rows.map(row => (
+                            <Tr key={row.node_name}>
+                                <Td dataLabel={columnNames.nodeName}>{row.node_name}</Td>
+                                <Td dataLabel={columnNames.entries}>{row.total_entries}</Td>
+                                <Td dataLabel={columnNames.memory}>{row.memory_entries}</Td>
+                            </Tr>
+                        ))}
+                    </Tbody>
+                </TableComposable>
+            </div>
+        )
+
+        return size <= 5 ? distributionChart : distributionTable;
     };
 
     const buildStatsOption = () => {
         return (
             <Select
                 variant={SelectVariant.single}
-                aria-label="storage-select"
+                aria-label="stats-select"
                 onToggle={() => setIsOpenStatsOptions(!isOpenStatsOptions)}
                 onSelect={onSelectStatsOptions}
                 selections={statsOption}
                 isOpen={isOpenStatsOptions}
-                aria-labelledby="toggle-id-storage"
-                toggleId="storageSelector"
+                aria-labelledby="toggle-id-stats"
+                toggleId="statsSelect"
                 width={200}
                 position="right"
             >
@@ -113,11 +207,10 @@ const DataDistribution = (props: {
                             text={t('caches.cache-metrics.data-distribution-title')}
                         />
                     </LevelItem>
-                    {buildStatsOption()}
+                    {dataDistribution?.length <= 5 && buildStatsOption()}
                 </Level>
             </CardTitle>
             <CardBody>{buildCardContent()}</CardBody>
-            {console.log("dataDistribution: ", dataDistribution)}
         </Card>
     );
 };

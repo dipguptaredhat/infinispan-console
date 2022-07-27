@@ -682,46 +682,94 @@ export class CacheService {
   public async getDistribution(
     cacheName: string
   ): Promise<Either<ActionResponse, DataDistribution[]>> {
-    return this.fetchCaller.get(
-      this.endpoint +
-        '/caches/' +
-        encodeURIComponent(cacheName) +
-        '?action=distribution',
-      (text) => text
-    );
-    // const dataDistrib = <DataDistribution[]>[
-    //   {
-    //     node_name: '12345678901234567890123',
-    //     node_addresses: ['127.0.0.1:44175'],
-    //     memory_entries: 2,
-    //     total_entries: 3,
-    //   },
-    //   {
-    //     node_name: 'NodeB',
-    //     node_addresses: ['127.0.0.1:44187'],
-    //     memory_entries: 5,
-    //     total_entries: 5,
-    //   },
-    //   {
-    //     node_name: 'NodeC',
-    //     node_addresses: ['127.0.0.1:44175'],
-    //     memory_entries: 3,
-    //     total_entries: 4,
-    //   },
-    //   {
-    //     node_name: 'NodeD',
-    //     node_addresses: ['127.0.0.1:44175'],
-    //     memory_entries: 2,
-    //     total_entries: 7,
-    //   },
-    //   {
-    //     node_name: 'NodeE',
-    //     node_addresses: ['127.0.0.1:44175'],
-    //     memory_entries: 1,
-    //     total_entries: 1,
-    //   },
-    // ];
+    // return this.fetchCaller.get(
+    //   this.endpoint +
+    //     '/caches/' +
+    //     encodeURIComponent(cacheName) +
+    //     '?action=distribution',
+    //   (text) => text
+    // );
+    const dataDistrib = <DataDistribution[]>[
+      {
+        node_name: '12345678901234567890123',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 2,
+        total_entries: 3,
+      },
+      {
+        node_name: 'NodeB',
+        node_addresses: ['127.0.0.1:44187'],
+        memory_entries: 5,
+        total_entries: 5,
+      },
+      {
+        node_name: 'NodeC',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 3,
+        total_entries: 4,
+      },
+      {
+        node_name: 'NodeD',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 2,
+        total_entries: 7,
+      },
+      {
+        node_name: 'NodeE',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 1,
+      },
+      {
+        node_name: 'NodeF',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeG',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeH',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeI',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeJ',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeK',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeL',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+      {
+        node_name: 'NodeM',
+        node_addresses: ['127.0.0.1:44175'],
+        memory_entries: 1,
+        total_entries: 0,
+      },
+    ];
 
-    // return Promise.resolve(right(dataDistrib));
+    return Promise.resolve(right(dataDistrib));
   }
 }

@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { ConsoleServices } from '@services/ConsoleServices';
 
 export function useDataDistribution(cacheName: string) {
-  const [dataDistribution, setDataDistribution] =
-    useState<DataDistribution[]>();
+  const [dataDistribution, setDataDistribution] = useState<
+    DataDistribution[] | any
+  >();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
