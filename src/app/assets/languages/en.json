@@ -694,5 +694,22 @@
     "cluster-distribution-option-no-memory": "No memory",
     "global-stats-enable-msg": "Global statistics for all caches in the cluster",
     "global-stats-disable-msg": "You must enable global statistics in the Cache Manager configuration to display values."
+  },
+  "access-management": {
+    "title": "Access management",
+    "description": "Access management allows you to control {{brandname}} Server administration.",
+    "tab-roles": "Roles",
+    "tab-access-control": "Access control",
+    "roles": {
+      "role-name": "Role name",
+      "role-name-tooltip": "Name of the role",
+      "cache-manager-permission": "Cache manager permissions",
+      "cache-permission": "Cache permissions",
+      "role-description": "Description",
+      "search-placeholder": "Find by {{searchOption}}",
+      "no-roles-found": "No roles found",
+      "no-roles-body": "You can create a role to manage access to {{brandname}} Server administration.",
+      "no-filtered-roles-body": "No roles match your search criteria."
+    }
   }
 }

@@ -452,3 +452,10 @@ interface ClusterDistribution {
   memory_available: number;
   memory_used: number;
 }
+
+interface role {
+  name: string;
+  description: string;
+  cacheManagerPermissions: string[];
+  cachePermissions: string[];
+}

@@ -47,3 +47,7 @@ body,
 .pf-c-table__action {
   text-align: right;
 }
+
+.role-table-display{
+  margin-bottom: var(--pf-global--spacer--md);
+}

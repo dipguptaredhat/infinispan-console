@@ -14,6 +14,7 @@ import { useDocumentTitle } from '@app/utils/useDocumentTitle';
 import { IndexManagement } from '@app/IndexManagement/IndexManagement';
 import { XSiteCache } from '@app/XSite/XSiteCache';
 import { DetailCachePage } from '@app/Caches/DetailCachePage';
+import { AccessManager } from '@app/AccessManagement/AccessManager';
 import { useConnectedUser } from '@app/services/userManagementHook';
 import { ConsoleServices } from '@services/ConsoleServices';
 import { ConsoleACL } from '@services/securityService';
@@ -147,6 +148,15 @@ const routes: IAppRoute[] = [
     label: 'Cache',
     path: '/cache/:cacheName',
     title: 'Cache',
+    menu: false
+  },
+  {
+    component: AccessManager,
+    exact: true,
+    label: 'Access Management',
+    path: '/access-management',
+    title: 'Access Management',
+    // TODO: enable when Rest API is implemented
     menu: false
   }
 ];
