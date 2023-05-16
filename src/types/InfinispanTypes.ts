@@ -459,3 +459,23 @@ interface role {
   cacheManagerPermissions: string[];
   cachePermissions: string[];
 }
+
+interface rolePermissions {
+  name: string;
+  category: string;
+  description: string;
+}
+
+interface roleCachePermissions {
+  cacheName: string;
+  cacheType: string;
+  health: string;
+}
+
+interface DetailedInfinispanRole {
+  name: string;
+  description: string;
+  permissions: rolePermissions[];
+  roleCachePermissions: roleCachePermissions[];
+  principals: string[];
+}

@@ -18,6 +18,7 @@ import { AccessManager } from '@app/AccessManagement/AccessManager';
 import { useConnectedUser } from '@app/services/userManagementHook';
 import { ConsoleServices } from '@services/ConsoleServices';
 import { ConsoleACL } from '@services/securityService';
+import { DetailRolePage } from './Roles/DetailRolePage';
 
 let routeFocusTimer: number;
 
@@ -157,6 +158,14 @@ const routes: IAppRoute[] = [
     path: '/access-management',
     title: 'Access Management',
     // TODO: enable when Rest API is implemented
+    menu: false
+  },
+  {
+    component: DetailRolePage,
+    exact: true,
+    label: 'Detail Role',
+    path: '/access-management/role/:roleName',
+    title: 'Detail Role',
     menu: false
   }
 ];

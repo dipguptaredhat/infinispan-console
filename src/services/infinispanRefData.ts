@@ -235,3 +235,15 @@ export enum RoleFilterOption {
   cacheManagerPermissions = 'Cache Manager Permissions',
   cachePermissions = 'Cache Permissions'
 }
+
+export enum RolePermissionFilterOption {
+  name = 'Name',
+  category = 'Category',
+  description = 'Description'
+}
+
+export enum RoleCachePermissionFilterOption {
+  cacheName = 'Cache name',
+  cacheType = 'Cache type',
+  health = 'Health'
+}

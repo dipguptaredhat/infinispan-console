@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ConsoleServices } from '@services/ConsoleServices';
+import { RoleDetailContext } from '@app/providers/RoleDetailProvider';
 
 // Will be removed when the backend is ready
 // Mocking the roles
@@ -13,6 +14,28 @@ function mockRole(roleNames): role[] {
     };
   });
   return roles;
+}
+
+function mockRoleDetail(roleName): DetailedInfinispanRole {
+  return {
+    name: roleName,
+    description: 'description',
+    permissions: [
+      {
+        name: 'permission',
+        category: 'category',
+        description: 'description'
+      }
+    ],
+    roleCachePermissions: [
+      {
+        cacheName: 'cacheName',
+        cacheType: 'cacheType',
+        health: 'health'
+      }
+    ],
+    principals: ['principals']
+  };
 }
 
 export function useFetchAvailableRoles() {
@@ -39,5 +62,21 @@ export function useFetchAvailableRoles() {
     roles,
     loading,
     error
+  };
+}
+
+export function useRoleDetail() {
+  const { loadRole, error, loading, roleName, description, rolePermissions, cachePermissions, principals } =
+    useContext(RoleDetailContext);
+
+  return {
+    loadRole,
+    error,
+    loading,
+    roleName,
+    description,
+    rolePermissions,
+    cachePermissions,
+    principals
   };
 }

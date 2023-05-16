@@ -710,6 +710,43 @@
       "no-roles-found": "No roles found",
       "no-roles-body": "You can create a role to manage access to {{brandname}} Server administration.",
       "no-filtered-roles-body": "No roles match your search criteria."
+    },
+    "role-detail": {
+      "loading": "Loading role {{roleName}} ...",
+      "error": "An error occurred while loading role {{roleName}}",
+      "general-tab": "General settings",
+      "permissions-tab": "Permissions",
+      "accessible-cache-tab": "Accessible caches",
+      "principal-tab": "Principals",
+      "back-button": "Back",
+      "general-settings": {
+        "name": "Name",
+        "description": "Description",
+        "submit-button": "Submit",
+        "cancel-button": "Cancel"
+      },
+      "permissions": {
+        "name": "Permission name",
+        "category": "Category",
+        "description": "Description",
+        "no-permission": "No permissions found",
+        "no-filter-permission": "No permissions match your search criteria",
+        "search-placeholder": "Find by {{searchOption}}"
+      },
+      "accessible-caches": {
+        "cache-name": "Cache name",
+        "cache-type": "Type",
+        "cache-health": "Health",
+        "no-cache": "No caches permission found",
+        "no-filter-cache": "No caches permissions match your search criteria",
+        "search-placeholder": "Find by {{searchOption}}"
+      },
+      "principals": {
+        "name": "Principal name",
+        "no-principal": "No principals found",
+        "no-filter-principal": "No principals match your search criteria",
+        "search-placeholder": "Find by name"
+      }
     }
   }
 }

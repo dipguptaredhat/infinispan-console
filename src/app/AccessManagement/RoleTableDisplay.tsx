@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
+  ButtonVariant,
   Bullseye,
   EmptyState,
   EmptyStateBody,
@@ -24,6 +26,7 @@ import { FilterIcon, SearchIcon } from '@patternfly/react-icons';
 import { useFetchAvailableRoles } from '@app/services/rolesHook';
 import { filterRoles } from '@app/utils/searchFilter';
 import { RoleFilterOption } from '@services/infinispanRefData';
+import { Link } from 'react-router-dom';
 
 const RoleTableDisplay = () => {
   const { t } = useTranslation();
@@ -169,7 +172,17 @@ const RoleTableDisplay = () => {
             filteredRoles.map((row) => {
               return (
                 <Tr key={row.name}>
-                  <Td dataLabel={columnNames.name}>{row.name}</Td>
+                  <Td dataLabel={columnNames.name}>
+                    <Link key={row.name} to={'/access-management/role/' + encodeURIComponent(row.name)}>
+                      <Button
+                        data-cy={`detailButton-${row.name}`}
+                        key={`detail-button-${row.name}`}
+                        variant={ButtonVariant.link}
+                      >
+                        {row.name}
+                      </Button>
+                    </Link>
+                  </Td>
                   <Td dataLabel={columnNames.managerPermissions}>{row.cacheManagerPermissions.join(', ')}</Td>
                   <Td dataLabel={columnNames.cachePermissions}>{row.cachePermissions.join(', ')}</Td>
                   <Td dataLabel={columnNames.description}>{row.description}</Td>

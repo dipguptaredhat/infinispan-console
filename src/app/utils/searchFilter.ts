@@ -38,3 +38,20 @@ export const filterRoles = (value: string, roles: role[], filterOption: string):
   }
   return [];
 };
+
+/**
+ * Utility function to help filters the list of items based on the search value and the filter option
+ * @param value - value to search
+ * @param items - list of items to search
+ * @param filterOptionSelected - filter option to search
+ * @returns list of items that match the search value
+ */
+export const filterItems = (value: string, items: any[], filterOptionSelected?: string): any[] => {
+  if (filterOptionSelected) {
+    return items.filter((item) => item[filterOptionSelected].toLowerCase().includes(value.toLowerCase()));
+  } else {
+    return items.filter((item) => {
+      return item.toLowerCase().includes(value.toLowerCase());
+    });
+  }
+};
