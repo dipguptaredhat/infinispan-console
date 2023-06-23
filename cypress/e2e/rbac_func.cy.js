@@ -221,14 +221,14 @@ describe('RBAC Functionlity Tests', () => {
     cy.contains('stringValue1');
     //Editing entry
     cy.get('[data-cy=actions-stringKey1]').click();
-    cy.get('[data-cy=editEntryAction]').click();
+    cy.get('[aria-label=editEntryAction]').click();
     cy.get('#value-entry').click().type('changedValue');
     cy.get('[data-cy=addButton]').click();
     cy.contains('Entry updated in cache indexed-cache-no-auth.');
     cy.contains('changedValue');
     //Deleting entry
     cy.get('[data-cy=actions-stringKey1]').click();
-    cy.get('[data-cy=deleteEntryAction]').click();
+    cy.get('[aria-label=deleteEntryAction]').click();
     cy.get('[data-cy=deleteEntryButton]').click();
     cy.contains('Entry stringKey1 deleted.');
     cy.contains('stringValue1').should('not.exist');
@@ -329,7 +329,7 @@ describe('RBAC Functionlity Tests', () => {
     cy.get('[data-cy=actions-kiaCar]').should('exist');
     //Editing entry
     cy.get('[data-cy=actions-kiaCar]').click();
-    cy.get('[data-cy=editEntryAction]').click();
+    cy.get('[aria-label=editEntryAction]').click();
     cy.get('#value-entry')
       .click()
       .clear()
@@ -341,7 +341,7 @@ describe('RBAC Functionlity Tests', () => {
     cy.contains('2016');
     //Deleting entry
     cy.get('[data-cy=actions-kiaCar]').click();
-    cy.get('[data-cy=deleteEntryAction]').click();
+    cy.get('[aria-label=deleteEntryAction]').click();
     cy.get('[data-cy=deleteEntryButton]').click();
     cy.contains('Entry kiaCar deleted.');
     cy.contains('2AC1898').should('not.exist');
