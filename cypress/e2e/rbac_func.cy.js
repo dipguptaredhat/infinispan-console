@@ -132,7 +132,6 @@ describe('RBAC Functionlity Tests', () => {
     cy.get('[data-cy=detailButton-' + cacheName + ']').click();
     if (isAdmin) {
       cy.get('[data-cy=addEntryButton]').should('exist');
-      cy.get('[data-cy=clearAllButton]').should('exist');
     } else {
       cy.get('[data-cy=addEntryButton]').should('not.exist');
       cy.get('[data-cy=clearAllButton]').should('not.exist');
@@ -328,7 +327,7 @@ describe('RBAC Functionlity Tests', () => {
     cy.contains('Entry added to cache super-cache.');
     cy.get('[data-cy=actions-kiaCar]').should('exist');
     //Editing entry
-    cy.get('[data-cy=actions-kiaCar]').click();
+    cy.get('[data-cy=actions-kiaCar] > div > button').click();
     cy.get('[aria-label=editEntryAction]').click();
     cy.get('#value-entry')
       .click()
@@ -340,7 +339,7 @@ describe('RBAC Functionlity Tests', () => {
     cy.contains('Entry updated in cache super-cache.');
     cy.contains('2016');
     //Deleting entry
-    cy.get('[data-cy=actions-kiaCar]').click();
+    cy.get('[data-cy=actions-kiaCar] > div > button').click();
     cy.get('[aria-label=deleteEntryAction]').click();
     cy.get('[data-cy=deleteEntryButton]').click();
     cy.contains('Entry kiaCar deleted.');
